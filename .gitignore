@@ -334,15 +334,3 @@ sh.exe.stackdump
 # Webpack analyser 
 statistics.html
 public/Assets-Mvc/.DS_Store
-
-#Web hint cli reports
-hint-report
-dataProcessing/data/csv/**
-dataProcessing/data/xml/**
-air-quality-app/src/data/csv/**
-air-quality-app/src/data/xml/**
-air-quality-app/dataProcessing/data/air-quality-data-2004-2019.csv
-air-quality-app/src/data/air-quality-data-2004-2019.csv
-data/air-quality-data-2004-2019.csv
-air-quality-app/wwwroot
-AirQualityMVC/wwwroot/**
