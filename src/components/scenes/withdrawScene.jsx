@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '../generic/button';
 const ContentArea = styled.div`
@@ -39,6 +39,10 @@ const WithdrawMessage = styled.div`
   font-family: ${'Calibri (Body)'};
   font-weight: ${'Bold'};
 `;
+const Amount = styled.div`
+  margin-left: auto;
+  margin-right: auto;
+`;
 const ButtonPositon = styled.div`
   width: 100%;
   height: 20%;
@@ -49,26 +53,27 @@ const ButtonPositon = styled.div`
   justify-content: space-evenly;
 `;
 export default function MainMenuScene(props) {
-  const { buttonOnClick } = props;
+  const { amountClick, confirmClick, amount } = props;
   return (
     <ContentArea>
       <WithdrawArea>
         <WithdrawMessage>Cash Withdrawal</WithdrawMessage>
+        <Amount>{`£${amount}`}</Amount>
         <ButtonPositon>
           <Button
             text={'- £5'}
             buttonKey={'withdraw'}
-            onClickFunc={buttonOnClick}
+            onClickFunc={() => amountClick(-5)}
           ></Button>
           <Button
             text={'+ £5'}
             buttonKey={'withdraw'}
-            onClickFunc={buttonOnClick}
+            onClickFunc={() => amountClick(5)}
           ></Button>
           <Button
             text={'Confirm'}
             buttonKey={'verification'}
-            onClickFunc={buttonOnClick}
+            onClickFunc={confirmClick}
           ></Button>
         </ButtonPositon>
       </WithdrawArea>

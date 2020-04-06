@@ -22,6 +22,7 @@ const ContentArea = styled.div`
 
 function App() {
   const [showScene, setShowScene] = useState('initial');
+  const [amount, setAmount] = useState(10);
 
   function getScene() {
     switch (showScene) {
@@ -30,9 +31,17 @@ function App() {
       case 'mainmenu':
         return <MainMenuScene buttonOnClick={buttonOnClick} />;
       case 'withdraw':
-        return <WithdrawScene buttonOnClick={buttonOnClick} />;
-        case 'verification':
-          return <VerificationScene buttonOnClick={buttonOnClick} />;
+        return (
+          <WithdrawScene
+            amountClick={setWithdrawAmount}
+            confirmClick={buttonOnClick}
+            amount={amount}
+          />
+        );
+      case 'verification':
+        return (
+          <VerificationScene buttonOnClick={buttonOnClick} amount={amount} />
+        );
       default:
         return null;
     }
@@ -40,6 +49,11 @@ function App() {
 
   function buttonOnClick(keyText) {
     return setShowScene(keyText);
+  }
+
+  function setWithdrawAmount(newAmount) {
+    if ((amount > 5 && newAmount < 0) || (amount < 250 && newAmount > 0))
+      return setAmount(amount + newAmount);
   }
   return (
     <MainBody>

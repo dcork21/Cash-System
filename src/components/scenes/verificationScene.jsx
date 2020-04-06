@@ -48,14 +48,15 @@ const ButtonPositon = styled.div`
   margin-bottom: 10%;
 `;
 export default function VerificationScene(props) {
-  const { buttonOnClick } = props;
+  const { buttonOnClick, amount } = props;
   return (
     <ContentArea>
       <MenuArea>
-        <MenuMessage>Verification</MenuMessage>
+        <MenuMessage>{`Your withdrawl request for £${amount} is processing`}</MenuMessage>
         <ButtonPositon>
           <Button
-            text={'Verifying Withdrawal...'}
+            text={'Return to Main Menu'}
+            buttonKey={'initial'}
             onClickFunc={buttonOnClick}
           ></Button>
         </ButtonPositon>
