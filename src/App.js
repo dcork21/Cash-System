@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Header from './components/header/header';
 import InitialScene from './components/scenes/initialScene';
 import MainMenuScene from './components/scenes/mainMenuScene';
 import WithdrawScene from './components/scenes/withdrawScene';
 import VerificationScene from './components/scenes/verificationScene';
+import LoginScene from './components/scenes/loginScene';
 
 const MainBody = styled.div`
   position: relative;
@@ -21,13 +22,59 @@ const ContentArea = styled.div`
 `;
 
 function App() {
-  const [showScene, setShowScene] = useState('initial');
+  const [userName, setUserName] = useState('');
+  const [loginToken, setLoginToken] = useState('');
+  const [showScene, setShowScene] = useState('login');
   const [amount, setAmount] = useState(10);
+
+  async function loginClick(userName, password) {
+    const LoginRequest = {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        UserName: userName,
+        Password: password,
+        LoginToken: loginToken,
+      }),
+    };
+    const response = await fetch(
+      'https://localhost:44356/Login/Post',
+      LoginRequest
+    ).then((res) => res.json());
+    setUserName(response.userName);
+    return setLoginToken(response.token);
+  }
+
+  function buttonOnClick(keyText) {
+    return setShowScene(keyText);
+  }
+
+  function setWithdrawAmount(newAmount) {
+    if ((amount > 5 && newAmount < 0) || (amount < 250 && newAmount > 0))
+      return setAmount(amount + newAmount);
+  }
+
+  useEffect(() => {
+    if (loginToken !== 'Unauthorized' && loginToken !== '') {
+      setShowScene('initial');
+    }
+    return () => {};
+  }, [loginToken]);
 
   function getScene() {
     switch (showScene) {
+      case 'login':
+        return (
+          <LoginScene buttonOnClick={loginClick} loginToken={loginToken} />
+        );
       case 'initial':
-        return <InitialScene buttonOnClick={buttonOnClick} />;
+        return (
+          <InitialScene buttonOnClick={buttonOnClick} userName={userName} />
+        );
       case 'mainmenu':
         return <MainMenuScene buttonOnClick={buttonOnClick} />;
       case 'withdraw':
@@ -47,14 +94,6 @@ function App() {
     }
   }
 
-  function buttonOnClick(keyText) {
-    return setShowScene(keyText);
-  }
-
-  function setWithdrawAmount(newAmount) {
-    if ((amount > 5 && newAmount < 0) || (amount < 250 && newAmount > 0))
-      return setAmount(amount + newAmount);
-  }
   return (
     <MainBody>
       <Header></Header>
