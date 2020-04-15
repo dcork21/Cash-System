@@ -1,3 +1,4 @@
+using CashSystemMVC.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +9,8 @@ using Microsoft.Extensions.Hosting;
 using React.AspNet;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using JavaScriptEngineSwitcher.V8;
+using Microsoft.EntityFrameworkCore;
+
 namespace CashSystemMVC
 {
     public class Startup
@@ -22,6 +25,8 @@ namespace CashSystemMVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connection = Configuration["DatabaseConnectionString"];
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(connection)).AddScoped<DbContext, DataContext>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddReact();
             services.AddControllers();
