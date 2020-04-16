@@ -4,9 +4,9 @@ namespace CashSystemMVC.Interfaces.Business
 {
     public interface IAtmMgt
     {
-        bool CreateAtm();
+        Atm CreateAtm();
         Atm GetAtm();
-        bool UpdateAtm();
+        Atm UpdateAtm();
         bool DeleteAtm();
     }
 }

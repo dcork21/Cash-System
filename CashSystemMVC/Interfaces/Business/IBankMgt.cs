@@ -4,9 +4,9 @@ namespace CashSystemMVC.Interfaces.Business
 {
     public interface IBankMgt
     {
-        bool CreateBank();
+        Bank CreateBank();
         Bank GetBank();
-        bool UpdateBank();
+        Bank UpdateBank();
         bool DeleteBank();
     }
 }

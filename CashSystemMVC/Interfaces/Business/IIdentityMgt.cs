@@ -4,9 +4,9 @@ namespace CashSystemMVC.Interfaces.Business
 {
     public interface IIdentityMgt
     {
-        bool CreateIdentity();
+        Identity CreateIdentity();
         Identity GetIdentity();
-        bool UpdateIdentity();
+        Identity UpdateIdentity();
         bool DeleteIdentity();
     }
 }
