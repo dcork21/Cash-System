@@ -5,7 +5,7 @@ using CashSystemMVC.Models;
 namespace CashSystemMVC.Interfaces.Business
 {
     /// <summary>
-    /// The Business Interface which manages the Account records
+    ///     The Business Interface which manages the Account records
     /// </summary>
     public interface IAccountMgt
     {
@@ -16,16 +16,15 @@ namespace CashSystemMVC.Interfaces.Business
     }
 
     /// <summary>
-    /// The realization of the Account manager interface
+    ///     The realization of the Account manager interface
     /// </summary>
     public class AccountMgt : IAccountMgt
     {
-
         // The database
         private readonly DataContext _data;
 
         /// <summary>
-        /// The constructor for the realization of the Account Manager
+        ///     The constructor for the realization of the Account Manager
         /// </summary>
         /// <param name="data">The database context dependency injected via StartUp</param>
         public AccountMgt(DataContext data)
@@ -34,7 +33,7 @@ namespace CashSystemMVC.Interfaces.Business
         }
 
         /// <summary>
-        /// Creates a new account
+        ///     Creates a new account
         /// </summary>
         /// <param name="userId">The ID of the User the account belongs to</param>
         /// <param name="accountNumber">The bank account number of the account</param>
@@ -59,6 +58,7 @@ namespace CashSystemMVC.Interfaces.Business
                     AccountNumber = accountNumber,
                     Balance = balance
                 });
+                _data.SaveChanges();
 
                 // return created account (will be null if account was not created for some reason)
                 return _data.Accounts.FirstOrDefault(a => a.AccountNumber == accountNumber && a.SortCode == sortCode);
@@ -71,7 +71,7 @@ namespace CashSystemMVC.Interfaces.Business
         }
 
         /// <summary>
-        /// Queries the database for an account with a matching account number and sort code
+        ///     Queries the database for an account with a matching account number and sort code
         /// </summary>
         /// <param name="userId">The ID of the User the account belongs to</param>
         /// <param name="accountNumber">The bank account number of the account</param>
@@ -85,7 +85,6 @@ namespace CashSystemMVC.Interfaces.Business
                 return _data.Accounts
                     .FirstOrDefault(a =>
                         a.UserId == userId && a.AccountNumber == accountNumber && a.SortCode == sortCode);
-
             }
             catch (Exception e)
             {
@@ -95,7 +94,7 @@ namespace CashSystemMVC.Interfaces.Business
         }
 
         /// <summary>
-        /// Updates the balance of the account to the new balance if the userId, accountNumber and sortCode are valid
+        ///     Updates the balance of the account to the new balance if the userId, accountNumber and sortCode are valid
         /// </summary>
         /// <param name="userId">The ID of the User the account belongs to</param>
         /// <param name="accountNumber">The bank account number of the account</param>
@@ -121,6 +120,7 @@ namespace CashSystemMVC.Interfaces.Business
                 // Else update balance
                 account.Balance = balance;
                 _data.Accounts.Update(account);
+                _data.SaveChanges();
 
                 // and return account
                 return account;
@@ -133,7 +133,6 @@ namespace CashSystemMVC.Interfaces.Business
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="userId">The ID of the User the account belongs to</param>
         /// <param name="accountNumber">The bank account number of the account</param>
@@ -147,7 +146,7 @@ namespace CashSystemMVC.Interfaces.Business
                 if (userId == 0 ||
                     string.IsNullOrEmpty(accountNumber) ||
                     string.IsNullOrEmpty(sortCode))
-                    return false; 
+                    return false;
 
                 // Get account
                 var account = _data.Accounts
@@ -160,16 +159,14 @@ namespace CashSystemMVC.Interfaces.Business
 
                 // Else remove the account
                 _data.Accounts.Remove(account);
-
-
-                // Query for account again
-                account = _data.Accounts
-                    .FirstOrDefault(a =>
-                        a.UserId == userId && a.AccountNumber == accountNumber && a.SortCode == sortCode);
+                _data.SaveChanges();
 
 
                 // Account should be null so this will return true if delete successful.
-                return account == null;
+                return _data.Accounts.FirstOrDefault(a => 
+                           a.UserId == userId && 
+                           a.AccountNumber == accountNumber 
+                           && a.SortCode == sortCode) == null;
             }
             catch (Exception e)
             {

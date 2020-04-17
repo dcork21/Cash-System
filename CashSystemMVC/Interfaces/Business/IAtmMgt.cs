@@ -10,7 +10,7 @@ namespace CashSystemMVC.Interfaces.Business
     /// </summary>
     public interface IAtmMgt
     {
-        Atm CreateAtm(int bankId, float latitude, float longitude);
+        Atm CreateAtm(float latitude, float longitude);
         Atm GetAtm(int atmId);
         Atm UpdateAtm(int atmId, float latitude, float longitude);
         bool DeleteAtm(int atmId);
@@ -36,27 +36,26 @@ namespace CashSystemMVC.Interfaces.Business
         /// <summary>
         /// Creates a new account
         /// </summary>
-        /// <param name="bankId">The ID of the Bank selected</param>
         /// <param name="latitude">The latitude of the ATM chosen</param>
         /// <param name="longitude">The longitude of the ATM chosen</param>
         /// <returns>The created account or null if the account could not be created</returns>
-        public Atm CreateAtm(int atmId, float latitude, float longitude)
+        public Atm CreateAtm(float latitude, float longitude)
         {
             try
             {
                 // Cannot find ATM without valid ATM ID, latitude and longitude
-                if (atmId == 0 ||
-                    float.IsNegative(latitude) ||
+                if (float.IsNegative(latitude) ||
                     float.IsNegative(longitude))
                     return null;
 
                 // Create ATM
                 _data.Atms.Add(new Atm
                 {
-                    AtmId = atmId,
                     Latitude = latitude,
                     Longitude = longitude
                 });
+                _data.SaveChanges();
+
                 // return created ATM (will be null if account was not created for some reason)
                 return _data.Atms.FirstOrDefault(x => x.Latitude == latitude && x.Longitude == longitude);
             }
@@ -76,10 +75,8 @@ namespace CashSystemMVC.Interfaces.Business
         {
             try
             {
-                // Query for Bank, will be null if no Bank found
-                return _data.Atms
-                    .FirstOrDefault(x =>
-                        x.BankId == atmId);
+                // Query for atm, will be null if no atm found
+                return _data.Atms.FirstOrDefault(x => x.AtmId == atmId);
             }
             catch (Exception e)
             {
@@ -87,50 +84,67 @@ namespace CashSystemMVC.Interfaces.Business
                 throw;
             }
         }
-    }
 
-    /// <summary>
-    /// Updates the ATM
-    /// </summary>
-    /// <param name = "atmId" > The ID of the ATM selected</param>
-    /// <param name="latitude">The latitude of the ATM chosen</param>
-    /// <param name="longitude">The longitude of the ATM chosen</param>
-    /// <returns>The updated account or null if the account could not be found</returns>
-    public Atm UpdateAtm(int atmId, float latitude, float longitude)
-    {
-        try
+        /// <summary>
+        /// Updates the ATM
+        /// </summary>
+        /// <param name = "atmId" > The ID of the ATM selected</param>
+        /// <param name="latitude">The latitude of the ATM chosen</param>
+        /// <param name="longitude">The longitude of the ATM chosen</param>
+        /// <returns>The updated account or null if the account could not be found</returns>
+        public Atm UpdateAtm(int atmId, float latitude, float longitude)
         {
-            // Cannot find ATM without valid ATM ID, latitude and longitude
-            if (atmId == 0 ||
-                float.IsNegative(latitude) ||
-                float.IsNegative(longitude))
-                return null;
+            try
+            {
+                // Cannot find ATM without valid ATM ID, latitude and longitude
+                if (atmId == 0 ||
+                    float.IsNegative(latitude) ||
+                    float.IsNegative(longitude))
+                    return null;
 
-            var atm = _data.Atms
-                .FirstOrDefault(x =>
-                x.AtmId == atmId && x.Latitude == latitude && x.Longitude == longitude);
+                var atm = _data.Atms.FirstOrDefault(x => x.AtmId == atmId);
 
-            if (atm == null) return null; // No Bank found
+                if (atm == null) return null; // No atm found
 
-            // Else update latitude and longitude
-            atm.Latitude = latitude;
-            _data.Banks.Update(atm);
-            atm.Longitude = longitude;
-            _data.Banks.Update(atm);
+                // Else update latitude and longitude
+                atm.Longitude = longitude;
+                atm.Latitude = latitude;
+                _data.Atms.Update(atm);
+                _data.SaveChanges();
 
-            // and return bank
-            return atm;
+                // and return atm
+                return atm;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-    }
 
-        public bool DeleteAtm()
+        public bool DeleteAtm(int atmId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                // Get Atm
+                var atm = _data.Atms.FirstOrDefault(a => a.AtmId == atmId );
+
+
+                // If ATM does not exist, return false indicating failed delete
+                if (atm == null) return false;
+
+                // Else remove the account
+                _data.Atms.Remove(atm);
+                _data.SaveChanges();
+
+                // Account should be null so this will return true if delete successful.
+                return _data.Atms.FirstOrDefault(a => a.AtmId == atmId) == null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }

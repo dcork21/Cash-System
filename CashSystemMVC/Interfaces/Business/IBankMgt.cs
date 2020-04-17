@@ -5,9 +5,8 @@ using CashSystemMVC.Models;
 namespace CashSystemMVC.Interfaces.Business
 {
     /// <summary>
-    /// The Business Interface that manages the Bank records
+    ///     The Business Interface that manages the Bank records
     /// </summary>
-
     public interface IBankMgt
     {
         Bank CreateBank(string name, string sortCode, float latitude, float longitude);
@@ -15,8 +14,9 @@ namespace CashSystemMVC.Interfaces.Business
         Bank UpdateBank(int bankId, string name, string sortCode, float latitude, float longitude);
         bool DeleteBank(int bankId);
     }
+
     /// <summary>
-    /// The realisation of the Bank management interface
+    ///     The realisation of the Bank management interface
     /// </summary>
     public class BankMgt : IBankMgt
     {
@@ -24,7 +24,7 @@ namespace CashSystemMVC.Interfaces.Business
         private readonly DataContext _data;
 
         /// <summary>
-        /// The constructor for the realisation of the Bank Manager
+        ///     The constructor for the realization of the Bank Manager
         /// </summary>
         /// <param name="data">The database context dependency injected via StartUp</param>
         public BankMgt(DataContext data)
@@ -33,21 +33,19 @@ namespace CashSystemMVC.Interfaces.Business
         }
 
         /// <summary>
-        /// Creates a new bank
+        ///     Creates a new bank
         /// </summary>
         /// <param name="name">The name of the Bank being used</param>
         /// <param name="latitude">The latitude of the Bank chosen</param>
         /// <param name="longitude">The longitude of the Bank chosen</param>
-        /// <param name="sortCode">The sort code of the bank account provider</param>
-        /// <param name="bankId">The ID of the Bank selected</param>
-        /// <returns>The created account or null if the account could not be created</returns>
-        public Bank CreateBank(int bankId, string name, string sortCode, float latitude, float longitude)
+        /// <param name="sortCode">The sort code of the bank bank provider</param>
+        /// <returns>The created bank or null if the bank could not be created</returns>
+        public Bank CreateBank(string name, string sortCode, float latitude, float longitude)
         {
             try
             {
                 // Cannot find Bank without valid bank ID, name and sort code
-                if (bankId == 0 ||
-                    string.IsNullOrEmpty(name) ||
+                if (string.IsNullOrEmpty(name) ||
                     string.IsNullOrEmpty(sortCode))
                     return null;
 
@@ -60,8 +58,11 @@ namespace CashSystemMVC.Interfaces.Business
                     Longitude = longitude
                 });
 
-                // return created Bank (null if account was not created)
-                return _data.Banks.FirstOrDefault(b => b.SortCode == sortCode && b.Name == name && b.Latitude == latitude && b.Longitude == longitude);
+                _data.SaveChanges();
+
+                // return created Bank (null if bank was not created)
+                return _data.Banks.FirstOrDefault(b =>
+                    b.SortCode == sortCode && b.Name == name && b.Latitude == latitude && b.Longitude == longitude);
             }
             catch (Exception e)
             {
@@ -72,18 +73,16 @@ namespace CashSystemMVC.Interfaces.Business
 
 
         /// <summary>
-        /// Queries the database for a Bank with matching ID
+        ///     Queries the database for a Bank with matching ID
         /// </summary>
         /// <param name="bankId">The ID of the bank</param>
-        /// <returns>The requested account or null if no account could be found</returns>
+        /// <returns>The requested bank or null if no bank could be found</returns>
         public Bank GetBank(int bankId)
         {
             try
             {
                 // Query for Bank, will be null if no Bank found
-                return _data.Banks
-                    .FirstOrDefault(b =>
-                        b.BankId == bankId);
+                return _data.Banks.FirstOrDefault(b => b.BankId == bankId);
             }
             catch (Exception e)
             {
@@ -93,14 +92,14 @@ namespace CashSystemMVC.Interfaces.Business
         }
 
         /// <summary>
-        /// Updates the balance of the account to the new balance if the userId, accountNumber and sortCode are valid
+        ///     Updates the balance of the bank to the new balance if the userId, bankNumber and sortCode are valid
         /// </summary>
         /// <param name="bankId">The ID of the bank</param>
         /// <param name="name">The name of the Bank being used</param>
-        /// <param name="sortCode">The sort code of the bank account provider</param>
+        /// <param name="sortCode">The sort code of the bank bank provider</param>
         /// <param name="latitude">The latitude of the Bank chosen</param>
-        /// <param name="longitude">The longitude of the Bank chosen</param> 
-        /// <returns>The updated account or null if the account could not be found</returns>
+        /// <param name="longitude">The longitude of the Bank chosen</param>
+        /// <returns>The updated bank or null if the bank could not be found</returns>
         public Bank UpdateBank(int bankId, string name, string sortCode, float latitude, float longitude)
         {
             try
@@ -110,17 +109,17 @@ namespace CashSystemMVC.Interfaces.Business
                     string.IsNullOrEmpty(name) ||
                     string.IsNullOrEmpty(sortCode))
                     return null;
-                var bank = _data.Banks
-                    .FirstOrDefault(b =>
-                    b.BankId == bankId && b.Name == name && b.SortCode == sortCode);
+                var bank = _data.Banks.FirstOrDefault(b => b.BankId == bankId);
 
                 if (bank == null) return null; // No Bank found
 
-                // Else update latitude and longitude
+                // Else update bank details
+                bank.Name = name;
+                bank.SortCode = sortCode;
                 bank.Latitude = latitude;
-                _data.Banks.Update(bank);
                 bank.Longitude = longitude;
                 _data.Banks.Update(bank);
+                _data.SaveChanges();
 
                 // and return bank
                 return bank;
@@ -133,7 +132,7 @@ namespace CashSystemMVC.Interfaces.Business
         }
 
         /// <summary>
-        /// Deletes the Bank ID from system/account
+        ///     Deletes the Bank ID from system/bank
         /// </summary>
         /// <param name="bankId">The ID of the bank</param>
         /// <returns>A bool indicating if the delete was successful or not</returns>
@@ -146,9 +145,7 @@ namespace CashSystemMVC.Interfaces.Business
                     return false;
 
                 // Get bank
-                var bank = _data.Banks
-                    .FirstOrDefault(b =>
-                    b.BankId == bankId);
+                var bank = _data.Banks.FirstOrDefault(b => b.BankId == bankId);
 
                 // If bank doesn't exist, return false indicating failed delete
                 if (bank == null) return false;
@@ -157,9 +154,8 @@ namespace CashSystemMVC.Interfaces.Business
                 _data.Banks.Remove(bank);
 
                 // Query for bank again
-                bank = _data.Banks
-                    .FirstOrDefault(b =>
-                    b.BankId == bankId);
+                bank = _data.Banks.FirstOrDefault(b => b.BankId == bankId);
+                _data.SaveChanges();
 
                 // Bank should be null so this will return true if delete is successful
                 return bank == null;
