@@ -13,8 +13,8 @@ const ContentArea = styled.div`
 `;
 
 const LoginArea = styled.div`
-  height: 300px;
-  width: 40%;
+  height: 290px;
+  width: 60%;
   margin-left: auto;
   margin-right: auto;
   border: 1px solid white;
@@ -26,7 +26,7 @@ const LoginArea = styled.div`
 `;
 const LoginMessage = styled.div`
   position: relative;
-  width: 60%;
+  width: 100%;
   height: 50px;
   margin-left: auto;
   margin-right: auto;
@@ -35,25 +35,29 @@ const LoginMessage = styled.div`
   display: flex;
   justify-content: center;
   text-align: center;
-  font-size: 24px;
+  font-size: 20px;
   font-family: ${'Calibri (Body)'};
   font-weight: ${'Bold'};
 `;
 const LoginPositon = styled.div`
   width: 100%;
   height: 200px;
-  margin-left: auto;
+  margin-left: -10px;
   margin-right: auto;
 `;
 
 const LoginBox = styled.div`
+  width: 55%;
+  height: 60px;
+  margin-top: auto;
   margin-left: auto;
   margin-right: auto;
-  width: 40%;
-  display: flex;
+  margin-bottom: auto;
 `;
 const LoginKey = styled.div`
-  margin-left: 20px;
+  width: 90%;
+  height: 10%;
+  margin-left: auto;
   margin-top: 10px;
 `;
 const LoginInput = styled.input`
@@ -77,11 +81,12 @@ export default function LoginScene(props) {
   return (
     <ContentArea>
       <LoginArea>
-        <LoginMessage>Login to your account</LoginMessage>
+        <LoginMessage>Please Enter Login Details</LoginMessage>
         <LoginPositon>
           <LoginBox>
             <LoginKey>Username</LoginKey>
-            <LoginInput onChange={(e) => setUsername(e.target.value)} />
+            <LoginInput onChange={(e) => setUsername(e.target.value)} 
+            />
           </LoginBox>
           <LoginBox>
             <LoginKey>Password</LoginKey>

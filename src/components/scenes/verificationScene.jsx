@@ -52,7 +52,7 @@ export default function VerificationScene(props) {
   return (
     <ContentArea>
       <MenuArea>
-        <MenuMessage>{`Your withdrawl request for £${amount} is processing`}</MenuMessage>
+        <MenuMessage>{`Your withdrawal request for £${amount} is processing...`}</MenuMessage>
         <ButtonPositon>
           <Button
             text={'Return to Main Menu'}
