@@ -1,7 +1,6 @@
 ﻿using CashSystemMVC.Models;
 using System;
 using System.Linq;
-using NotImplementedException = System.NotImplementedException;
 
 namespace CashSystemMVC.Interfaces.Business
 {

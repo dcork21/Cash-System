@@ -1,13 +1,14 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CashSystemMVC.Models
 {
+    [Table("Identity")]
     public class Identity
     {
         public Identity(string userName,
             string firstName,
             string lastName,
-            string address,
+            string postAddress,
             string postcode,
             string mobile,
             string email)
@@ -15,7 +16,7 @@ namespace CashSystemMVC.Models
             UserName = userName;
             FirstName = firstName;
             LastName = lastName;
-            Address = address;
+            PostAddress = postAddress;
             Postcode = postcode;
             Mobile = mobile;
             Email = email;
@@ -26,7 +27,7 @@ namespace CashSystemMVC.Models
         public string PasswordHash { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Address { get; set; }
+        public string PostAddress { get; set; }
         public string Postcode { get; set; }
         public string Mobile { get; set; }
         public string Email { get; set; }
@@ -36,7 +37,7 @@ namespace CashSystemMVC.Models
         {
             FirstName = firstName;
             LastName = lastName;
-            Address = address;
+            PostAddress = address;
             Postcode = postcode;
             Mobile = mobile;
             Email = email;

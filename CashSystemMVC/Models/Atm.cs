@@ -1,6 +1,8 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
 namespace CashSystemMVC.Models
 {
+    [Table("Atm")]
     public class Atm
     {
         public int AtmId { get; set; }

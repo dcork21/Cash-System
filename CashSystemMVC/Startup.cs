@@ -1,3 +1,5 @@
+using CashSystemMVC.Interfaces.Business;
+using CashSystemMVC.Interfaces.System;
 using CashSystemMVC.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,7 +29,21 @@ namespace CashSystemMVC
         {
             var connection = Configuration["DatabaseConnectionString"];
             services.AddDbContext<DataContext>(options => options.UseSqlServer(connection)).AddScoped<DbContext, DataContext>();
+                
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            // Add business interfaces
+            services.AddScoped<IAccountMgt, AccountMgt>();
+            services.AddScoped<IAtmMgt, AtmMgt>();
+            services.AddScoped<IBankMgt, BankMgt>();
+            services.AddScoped<IIdentityMgt, IdentityMgt>();
+            services.AddScoped<IUserMgt, UserMgt>();
+
+            // Add System interfaces
+            services.AddScoped<ICrypto, Crypto>();
+            services.AddScoped<IRequestWithdraw, RequestWithdraw>();
+
+
             services.AddReact();
             services.AddControllers();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);

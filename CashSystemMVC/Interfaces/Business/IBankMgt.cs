@@ -53,7 +53,7 @@ namespace CashSystemMVC.Interfaces.Business
                 _data.Banks.Add(new Bank
                 {
                     SortCode = sortCode,
-                    Name = name,
+                    BankName = name,
                     Latitude = latitude,
                     Longitude = longitude
                 });
@@ -62,7 +62,7 @@ namespace CashSystemMVC.Interfaces.Business
 
                 // return created Bank (null if bank was not created)
                 return _data.Banks.FirstOrDefault(b =>
-                    b.SortCode == sortCode && b.Name == name && b.Latitude == latitude && b.Longitude == longitude);
+                    b.SortCode == sortCode && b.BankName == name && b.Latitude == latitude && b.Longitude == longitude);
             }
             catch (Exception e)
             {
@@ -114,7 +114,7 @@ namespace CashSystemMVC.Interfaces.Business
                 if (bank == null) return null; // No Bank found
 
                 // Else update bank details
-                bank.Name = name;
+                bank.BankName = name;
                 bank.SortCode = sortCode;
                 bank.Latitude = latitude;
                 bank.Longitude = longitude;
