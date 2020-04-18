@@ -25,7 +25,7 @@ namespace CashSystemMVC.Interfaces.Business
         private readonly DataContext _data;
 
         /// <summary>
-        /// The constructor for the realisation of the ATM Manager
+        /// The constructor for the realization of the ATM Manager
         /// </summary>
         /// <param name="data">The database context dependency injected via StartUp</param>
         public AtmMgt(DataContext data)
@@ -96,12 +96,6 @@ namespace CashSystemMVC.Interfaces.Business
         {
             try
             {
-                // Cannot find ATM without valid ATM ID, latitude and longitude
-                if (atmId == 0 ||
-                    float.IsNegative(latitude) ||
-                    float.IsNegative(longitude))
-                    return null;
-
                 var atm = _data.Atms.FirstOrDefault(x => x.AtmId == atmId);
 
                 if (atm == null) return null; // No atm found

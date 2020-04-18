@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using CashSystemMVC.Interfaces.System;
 using CashSystemMVC.Models;
 
 namespace CashSystemMVC.Interfaces.Business
@@ -40,14 +41,17 @@ namespace CashSystemMVC.Interfaces.Business
     {
         // The database
         private readonly DataContext _data;
+        private readonly ICrypto _crypto;
 
         /// <summary>
         ///     The constructor for the realization of the Identity Manager
         /// </summary>
         /// <param name="data">The database context dependency injected via StartUp</param>
-        public IdentityMgt(DataContext data)
+        /// <param name="crypto">The Argon2 crypto implementation</param>
+        public IdentityMgt(DataContext data, ICrypto crypto)
         {
             _data = data;
+            _crypto = crypto;
         }
 
         /// <summary>
@@ -81,7 +85,7 @@ namespace CashSystemMVC.Interfaces.Business
                 mobile,
                 email)
             {
-                PasswordHash = EncryptString(password, "SALT") // Securely store the password as a hash
+                PasswordHash = _crypto.Encrypt(password, userName, "PASSWORD") // Securely store the password as a hash
             };
 
             _data.Identities.Add(identity); // Store the record
@@ -103,7 +107,7 @@ namespace CashSystemMVC.Interfaces.Business
                 var identity = _data.Identities.FirstOrDefault(i => i.UserName.Equals(userName));
 
                 // If identity is found (not null) and provided password matches stored password, return identity. Otherwise return null
-                return identity != null && EncryptString(password, "SALT").Equals(identity.PasswordHash) ? identity : null;
+                return identity != null && _crypto.Decrypt(identity.PasswordHash, password) ? identity : null;
             }
             catch (Exception e)
             {
@@ -140,7 +144,7 @@ namespace CashSystemMVC.Interfaces.Business
                 var identity = _data.Identities.FirstOrDefault(i => i.UserName.Equals(userName));
 
                 // If identity not found or provided password incorrect return null
-                if (identity == null || !EncryptString(password, "SALT").Equals(identity.PasswordHash)) return null;
+                if (identity == null || !_crypto.Decrypt(identity.PasswordHash, password)) return null;
 
                 // Otherwise, update with provided details, save to database and return updated identity
                 identity.Update(firstName, lastName, address, postcode, mobile, email);
@@ -174,18 +178,6 @@ namespace CashSystemMVC.Interfaces.Business
                 Console.WriteLine(e);
                 return false;
             }
-        }
-
-        /// <summary>
-        /// Encrypts the provided string
-        /// </summary>
-        /// <param name="stringToHash">the string to encrypt</param>
-        /// <param name="salt">the salt to provide entropy</param>
-        /// <returns>The encrypted string</returns>
-        private static string EncryptString(string stringToHash, string salt)
-        {
-            // TODO - Implement encryption
-            return salt + ":" + stringToHash;
         }
     }
 }

@@ -121,8 +121,17 @@ namespace CashSystemMVC.Interfaces.Business
                 // Get identity, will return null if not authenticated
                 var identity = _identityMgt.GetIdentity(userName, password);
 
-                // If not authenticated (return null), otherwise return the user record linked to the provided identity
-                return identity == null ? null : _data.Users.FirstOrDefault(u => u.IdentityId == identity.Id);
+                if (identity == null) return null;
+
+                User user = _data.Users.FirstOrDefault(u => u.IdentityId == identity.Id);
+
+                if (user == null) return null;
+
+                user.SessionExpiry = DateTime.Now.AddHours(1);
+                user.SessionToken = Guid.NewGuid().ToString("N");
+                _data.Users.Update(user);
+                return user;
+
             }
             catch (Exception e)
             {

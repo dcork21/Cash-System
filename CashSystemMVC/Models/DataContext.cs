@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Contracts;
+using CashSystemMVC.Views;
 
 namespace CashSystemMVC.Models
 {

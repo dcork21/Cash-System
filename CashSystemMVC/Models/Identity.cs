@@ -1,4 +1,6 @@
-﻿namespace CashSystemMVC.Models
+﻿using System;
+
+namespace CashSystemMVC.Models
 {
     public class Identity
     {
