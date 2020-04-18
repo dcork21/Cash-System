@@ -107,7 +107,7 @@ namespace CashSystemMVC.Interfaces.Business
                 var identity = _data.Identities.FirstOrDefault(i => i.UserName.Equals(userName));
 
                 // If identity is found (not null) and provided password matches stored password, return identity. Otherwise return null
-                return identity != null && _crypto.Decrypt(identity.PasswordHash, password) ? identity : null;
+                return identity != null && _crypto.Decrypt(identity.PasswordHash, password, userName, "PASSWORD") ? identity : null;
             }
             catch (Exception e)
             {
@@ -144,7 +144,7 @@ namespace CashSystemMVC.Interfaces.Business
                 var identity = _data.Identities.FirstOrDefault(i => i.UserName.Equals(userName));
 
                 // If identity not found or provided password incorrect return null
-                if (identity == null || !_crypto.Decrypt(identity.PasswordHash, password)) return null;
+                if (identity == null || !_crypto.Decrypt(identity.PasswordHash,  password,identity.UserName, "PASSWORD")) return null;
 
                 // Otherwise, update with provided details, save to database and return updated identity
                 identity.Update(firstName, lastName, address, postcode, mobile, email);
