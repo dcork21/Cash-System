@@ -21,7 +21,8 @@ namespace CashSystemMVC.Controllers
         }
 
         [HttpPut]
-        public IActionResult RegisterUser(string userName,
+        public IActionResult Register(
+            string userName,
             string password,
             string firstName,
             string lastName,
@@ -48,7 +49,7 @@ namespace CashSystemMVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult AuthenticateUser([FromBody] LoginRequest loginRequest)
+        public IActionResult Authenticate([FromBody] LoginRequest loginRequest)
         {
             try
             {

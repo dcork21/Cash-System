@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Header from './components/header/header';
 import InitialScene from './components/scenes/initialScene';
@@ -6,6 +6,9 @@ import MainMenuScene from './components/scenes/mainMenuScene';
 import WithdrawScene from './components/scenes/withdrawScene';
 import VerificationScene from './components/scenes/verificationScene';
 import LoginScene from './components/scenes/loginScene';
+import RegistrationScene from './components/scenes/registrationScene';
+import RegistrationFailed from './components/scenes/registrationFailScene';
+import RegistrationSuccess from './components/scenes/registrationSuccessScene';
 
 const MainBody = styled.div`
   position: relative;
@@ -23,33 +26,12 @@ const ContentArea = styled.div`
 
 function App() {
   const [userName, setUserName] = useState('');
-  const [loginToken, setLoginToken] = useState('');
+  const [sessionToken, setSessionToken] = useState('');
   const [showScene, setShowScene] = useState('login');
   const [amount, setAmount] = useState(10);
 
-  async function loginClick(userName, password) {
-    const LoginRequest = {
-      method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        UserName: userName,
-        Password: password,
-        LoginToken: loginToken,
-      }),
-    };
-    const response = await fetch(
-      'https://localhost:44356/Login/Post',
-      LoginRequest
-    ).then((res) => res.json());
-    setUserName(response.userName);
-    return setLoginToken(response.token);
-  }
-
   function buttonOnClick(keyText) {
+    console.log('keyText', keyText);
     return setShowScene(keyText);
   }
 
@@ -58,19 +40,32 @@ function App() {
       return setAmount(amount + newAmount);
   }
 
-  useEffect(() => {
-    if (loginToken !== 'Unauthorized' && loginToken !== '') {
-      setShowScene('initial');
-    }
-    return () => {};
-  }, [loginToken]);
-
+  function loginSuccessFunction(userName, token) {
+    setUserName(userName);
+    setSessionToken(token);
+    return setShowScene('initial');
+  }
   function getScene() {
     switch (showScene) {
       case 'login':
         return (
-          <LoginScene buttonOnClick={loginClick} loginToken={loginToken} />
+          <LoginScene
+            loginSuccessFunction={loginSuccessFunction}
+            sessionToken={sessionToken}
+            registerFunction={() => setShowScene('register')}
+          />
         );
+      case 'register':
+        return (
+          <RegistrationScene
+            buttonOnClick={buttonOnClick}
+            loginFunction={() => setShowScene('login')}
+          />
+        );
+      case 'registersuccess':
+        return <RegistrationSuccess buttonOnClick={buttonOnClick} />;
+      case 'registerfail':
+        return <RegistrationFailed buttonOnClick={buttonOnClick} />;
       case 'initial':
         return (
           <InitialScene buttonOnClick={buttonOnClick} userName={userName} />

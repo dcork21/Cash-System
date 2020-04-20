@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '../generic/button';
+import FormInput from '../generic/formInput';
+import { authenticateUser } from '../../requests/userRequests';
+
 const ContentArea = styled.div`
   position: relative;
   width: 100%;
@@ -39,69 +42,104 @@ const LoginMessage = styled.div`
   font-family: ${'Calibri (Body)'};
   font-weight: ${'Bold'};
 `;
-const LoginPositon = styled.div`
+
+const WarningMessage = styled.div`
+  position: relative;
+  color: red;
+  width: 100%;
+  height: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-size: 16px;
+  font-family: ${'Calibri (Body)'};
+`;
+
+const LoginPosition = styled.div`
+  position: relative;
   width: 100%;
   height: 200px;
   margin-left: -10px;
   margin-right: auto;
 `;
-
-const LoginBox = styled.div`
-  width: 55%;
-  height: 60px;
-  margin-top: auto;
-  margin-left: auto;
+const RegisterPosition = styled.div`
+  position: absolute;
+  width: 50%;
+  height: 20px;
+  left: 10px;
+  bottom: 10px;
+`;
+const RegisterMessage = styled.div`
+  position: relative;
+  width: 100%;
+  height: 200px;
+  margin-left: -10px;
   margin-right: auto;
-  margin-bottom: auto;
-`;
-const LoginKey = styled.div`
-  width: 90%;
-  height: 10%;
-  margin-left: auto;
-  margin-top: 10px;
-`;
-const LoginInput = styled.input`
-  margin-left: 10px;
-  margin-top: 10px;
+  :hover {
+    cursor: pointer;
+  }
 `;
 
 const ButtonPositon = styled.div`
-  width: 40%;
-  height: 20%;
-  margin-top: 10px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 10%;
+  position: absolute;
+  width: 20%;
+  bottom: 10px;
+  right: 10px;
 `;
 export default function LoginScene(props) {
-  const [userName, setUsername] = useState('');
+  const { loginSuccessFunction, registerFunction } = props;
+  const [hasFailed, setHasFailed] = useState(false);
+  const [warnings, setWarnings] = useState([]);
+  const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
 
-  const { buttonOnClick } = props;
+  async function doLogin() {
+    let newWarnings = [];
+
+    if (userName === '') newWarnings.push('Username');
+    if (password === '') newWarnings.push('Password');
+    setWarnings(newWarnings);
+    if (newWarnings.length > 0) return;
+
+    let response = await authenticateUser(userName, password);
+
+    if (response.sessionToken)
+      return loginSuccessFunction(userName, response.sessionToken);
+    return setHasFailed(true);
+  }
+  
   return (
     <ContentArea>
       <LoginArea>
-        <LoginMessage>Please Enter Login Details</LoginMessage>
-        <LoginPositon>
-          <LoginBox>
-            <LoginKey>Username</LoginKey>
-            <LoginInput onChange={(e) => setUsername(e.target.value)} 
-            />
-          </LoginBox>
-          <LoginBox>
-            <LoginKey>Password</LoginKey>
-            <LoginInput
-              onChange={(e) => setPassword(e.target.value)}
-              type={'password'}
-            />
-          </LoginBox>
+        <LoginMessage>Login</LoginMessage>
+        <WarningMessage>
+          {hasFailed && 'Username or Password incorrect'}
+        </WarningMessage>
+        <LoginPosition>
+          <FormInput
+            showWarning={warnings.includes('Username')}
+            inputKey={'Username'}
+            inputValue={userName}
+            updateFunction={setUserName}
+          />
+          <FormInput
+            showWarning={warnings.includes('Password')}
+            inputKey={'Password'}
+            inputValue={password}
+            updateFunction={setPassword}
+          />
+          <RegisterPosition>
+            <RegisterMessage onClick={() => registerFunction()}>
+              No account? Click here to register
+            </RegisterMessage>
+          </RegisterPosition>
           <ButtonPositon>
-            <Button
-              text={'Submit'}
-              onClickFunc={() => buttonOnClick(userName, password)}
-            ></Button>
+            <Button text={'Submit'} onClickFunc={() => doLogin()}></Button>
           </ButtonPositon>
-        </LoginPositon>
+        </LoginPosition>
       </LoginArea>
     </ContentArea>
   );
