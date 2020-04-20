@@ -12,7 +12,7 @@ namespace CashSystemMVC.Models
         public int UserId { get; set; }
         public string SortCode { get; set; }
         public string AccountNumber { get; set; }
-        public float Balance { get; set; }
+        public double Balance { get; set; }
         #endregion
 
         #region RelationalData

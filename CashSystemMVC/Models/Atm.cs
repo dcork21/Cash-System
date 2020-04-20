@@ -6,8 +6,8 @@ namespace CashSystemMVC.Models
     public class Atm
     {
         public int AtmId { get; set; }
-        public int BankId { get; set; }
-        public float Latitude { get; set; }
-        public float Longitude { get; set; }
+        [ForeignKey("BankId")] public int BankId { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
     }
 }

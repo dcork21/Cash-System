@@ -9,7 +9,7 @@ namespace CashSystemMVC.Interfaces.Business
     /// </summary>
     public interface IAccountMgt
     {
-        Account CreateAccount(int userId, string accountNumber, string sortCode, float balance);
+        Account CreateAccount(string sessionToken, int userId, string accountNumber, string sortCode, float balance);
         Account GetAccount(int userId, string accountNumber, string sortCode);
         Account UpdateAccount(int userId, string accountNumber, string sortCode, float balance);
         bool DeleteAccount(int userId, string accountNumber, string sortCode);
@@ -35,12 +35,13 @@ namespace CashSystemMVC.Interfaces.Business
         /// <summary>
         ///     Creates a new account
         /// </summary>
+        /// <param name="sessionToken">Used to authenticate the request</param>
         /// <param name="userId">The ID of the User the account belongs to</param>
         /// <param name="accountNumber">The bank account number of the account</param>
         /// <param name="sortCode">The sort code of the bank account provider</param>
         /// <param name="balance">The current balance of the account in £GBP</param>
         /// <returns>The created account or null if the account could not be created</returns>
-        public Account CreateAccount(int userId, string accountNumber, string sortCode, float balance)
+        public Account CreateAccount(string sessionToken, int userId, string accountNumber, string sortCode, float balance)
         {
             try
             {
@@ -50,10 +51,22 @@ namespace CashSystemMVC.Interfaces.Business
                     string.IsNullOrEmpty(sortCode))
                     return null;
 
+                // Get the user which owns the account
+                User user = _data.Users.FirstOrDefault(u => u.UserId == userId);
+
+                
+                // If user is not found, the user session cannot be authenticated or the user session has expired, return null
+                if (user == null || !user.SessionToken.Equals(sessionToken) || DateTime.Now.CompareTo(user.SessionExpiry) > 0) return null;
+
+                Bank bank = _data.Banks.FirstOrDefault(b => b.SortCode.Equals(sortCode));
+
+                if (bank == null) return null;
+
                 // Create account
                 _data.Accounts.Add(new Account
                 {
                     UserId = userId,
+                    BankId = bank.BankId,
                     SortCode = sortCode,
                     AccountNumber = accountNumber,
                     Balance = balance

@@ -10,8 +10,8 @@ namespace CashSystemMVC.Models
         public int BankId { get; set; }
         public string BankName { get; set; }
         public string SortCode { get; set; }
-        public float Latitude { get; set; }
-        public float Longitude { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
         #endregion
 
         #region RelationalData

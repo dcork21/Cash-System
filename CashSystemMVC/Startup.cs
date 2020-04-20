@@ -32,6 +32,10 @@ namespace CashSystemMVC
                 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            // Add System interfaces
+            services.AddScoped<ICrypto, Crypto>();
+            services.AddScoped<IRequestWithdraw, RequestWithdraw>();
+
             // Add business interfaces
             services.AddScoped<IAccountMgt, AccountMgt>();
             services.AddScoped<IAtmMgt, AtmMgt>();
@@ -39,9 +43,7 @@ namespace CashSystemMVC
             services.AddScoped<IIdentityMgt, IdentityMgt>();
             services.AddScoped<IUserMgt, UserMgt>();
 
-            // Add System interfaces
-            services.AddScoped<ICrypto, Crypto>();
-            services.AddScoped<IRequestWithdraw, RequestWithdraw>();
+
 
 
             services.AddReact();

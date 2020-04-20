@@ -34,12 +34,12 @@ CREATE TABLE [Bank] (
 CREATE TABLE [Identity] (
     Id INT PRIMARY KEY IDENTITY (1, 1),
 	UserName VARCHAR (32),
-	PasswordHash VARCHAR (64),
+	PasswordHash VARCHAR (128),
     FirstName VARCHAR (32),
     LastName VARCHAR (32),
-    PostAddress VARCHAR (32),
+    PostAddress VARCHAR (128),
     PostCode VARCHAR (8),
-    Mobile VARCHAR (32),
+    Mobile VARCHAR (16),
     Email VARCHAR (32)
   );
 
@@ -51,9 +51,9 @@ CREATE TABLE [Identity] (
 );
 
 CREATE TABLE [Withdrawal] (
-  WithdrawlId INT PRIMARY KEY IDENTITY (1, 1),
+  WithdrawalId INT PRIMARY KEY IDENTITY (1, 1),
   AccountId INT,
-  VerificationHash VARCHAR (32),
+  VerificationHash VARCHAR (128),
   Amount FLOAT,
   ExpiryDate DATETIME2
 );

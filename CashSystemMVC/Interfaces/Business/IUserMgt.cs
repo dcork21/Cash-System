@@ -39,14 +39,14 @@ namespace CashSystemMVC.Interfaces.Business
     {
         // The database
         private readonly DataContext _data;
-        private readonly IdentityMgt _identityMgt;
+        private readonly IIdentityMgt _identityMgt;
 
         /// <summary>
         ///     The constructor for the realization of the User Manager
         /// </summary>
         /// <param name="data">The database context dependency injected via StartUp</param>
         /// <param name="identityMgt">The identity manager interface injected via Startup</param>
-        public UserMgt(DataContext data, IdentityMgt identityMgt)
+        public UserMgt(DataContext data, IIdentityMgt identityMgt)
         {
             _data = data;
             _identityMgt = identityMgt;
@@ -130,6 +130,7 @@ namespace CashSystemMVC.Interfaces.Business
                 user.SessionExpiry = DateTime.Now.AddHours(1);
                 user.SessionToken = Guid.NewGuid().ToString("N");
                 _data.Users.Update(user);
+                _data.SaveChanges();
                 return user;
 
             }
