@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Button from '../generic/button';
-import FormInput from '../generic/formInput';
-import { registerUser } from '../../requests/userRequests';
+import Button from '../../generic/button';
+import FormInput from '../../generic/formInput';
+import { registerUser } from '../../../requests/userRequests';
 
 const ContentArea = styled.div`
   position: relative;
@@ -16,9 +16,9 @@ const ContentArea = styled.div`
 `;
 
 const RegistrationArea = styled.div`
-  position: relative;
+position: relative;
   height: auto;
-  width: 60%;
+  width: 75%;
   margin-left: auto;
   margin-right: auto;
   border: 1px solid white;
@@ -28,10 +28,11 @@ const RegistrationArea = styled.div`
   justify-content: space-between;
   padding: 20px;
 `;
+
 const RegistrationMessage = styled.div`
   position: relative;
   width: 100%;
-  height: 50px;
+  height: 20px;
   margin-left: auto;
   margin-right: auto;
   background-color: #9e9e9e;
@@ -48,7 +49,7 @@ const WarningMessage = styled.div`
   position: relative;
   color: red;
   width: 100%;
-  height: 20px;
+  height: 15px;
   margin-left: auto;
   margin-right: auto;
   box-sizing: border-box;
@@ -59,16 +60,16 @@ const WarningMessage = styled.div`
   font-family: ${'Calibri (Body)'};
 `;
 const RegistrationPositon = styled.div`
+  position: relative;
   width: 100%;
   height: auto;
-  margin-left: -10px;
   margin-right: auto;
   padding-bottom: 50px;
 `;
 
 const LoginPosition = styled.div`
   position: absolute;
-  width: 50%;
+  width: 60%;
   height: 20px;
   left: 10px;
   bottom: 10px;
@@ -79,6 +80,7 @@ const LoginMessage = styled.div`
   width: 100%;
   height: 200px;
   margin-right: auto;
+  font-size: 12px;
   :hover {
     cursor: pointer;
   }
@@ -86,9 +88,9 @@ const LoginMessage = styled.div`
 
 const ButtonPositon = styled.div`
   position: absolute;
-  width: 20%;
-  bottom: 10px;
-  right: 10px;
+  width: 30%;
+  bottom: 5px;
+  right: 5px;
 `;
 
 export default function RegistrationScene(props) {
@@ -145,6 +147,7 @@ export default function RegistrationScene(props) {
           />
           <FormInput
             showWarning={warnings.includes('Password')}
+            inputType={'password'}
             inputKey={'Password'}
             inputValue={password}
             updateFunction={setPassword}
@@ -187,7 +190,7 @@ export default function RegistrationScene(props) {
           />
           <LoginPosition>
             <LoginMessage onClick={() => loginFunction()}>
-              Already have an account? Click here to login.
+              Already have an account? Login here.
             </LoginMessage>
           </LoginPosition>
           <ButtonPositon>

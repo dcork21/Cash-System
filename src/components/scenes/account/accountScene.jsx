@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from '../generic/button';
+import Button from '../../generic/button';
 const ContentArea = styled.div`
   position: relative;
   width: 100%;
@@ -13,7 +13,7 @@ const ContentArea = styled.div`
 `;
 
 const WelcomeArea = styled.div`
-  height: 20%;
+  height: 350px;
   width: 75%;
   margin-left: auto;
   margin-right: auto;
@@ -35,7 +35,7 @@ const WelcomeTitle = styled.div`
   display: flex;
   justify-content: center;
   text-align: center;
-  font-size: 18px;
+  font-size: 16px;
   font-family: ${'Calibri (Body)'};
   font-weight: ${'Bold'};
 `;
@@ -57,26 +57,41 @@ const WelcomeMessage = styled.div`
 `;
 
 const ButtonPositon = styled.div`
-  width: 40%;
-  height: 20%;
+  width: 90%;
+  height: 200px;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
-export default function InitialScene(props) {
-  const { userName, buttonOnClick } = props;
-
+export default function AccountScene(props) {
+  const { buttonOnClick, bank, sortCode, accountNumber, balance } = props;
   return (
     <ContentArea>
       <WelcomeArea>
-      <WelcomeTitle>{`Hello ${userName}.`}</WelcomeTitle>
-      <WelcomeMessage>Welcome back to the Smart Bank</WelcomeMessage>
+        <WelcomeTitle>{`Your ${bank.bankName} Account`}</WelcomeTitle>
+        <WelcomeMessage>{`SortCode: ${sortCode}`}</WelcomeMessage>
+        <WelcomeMessage>{`Account Number: ${accountNumber}`}</WelcomeMessage>
+        <WelcomeMessage>{`Balance: £${balance.toFixed(2)}`}</WelcomeMessage>
         <ButtonPositon>
           <Button
-            text={'Continue'}
+            text={'Request Withdraw'}
+            buttonKey={'withdraw'}
+            onClickProps={props}
+            onClickFunc={buttonOnClick}
+          />
+          <Button
+            text={'Back to Accounts Menu'}
+            buttonKey={'accountmenu'}
+            onClickFunc={buttonOnClick}
+          />
+          <Button
+            text={'Back to Main Menu'}
             buttonKey={'mainmenu'}
             onClickFunc={buttonOnClick}
-          ></Button>
+          />
         </ButtonPositon>
       </WelcomeArea>
     </ContentArea>

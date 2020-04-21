@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from '../generic/button';
+import Button from '../../generic/button';
+
 const ContentArea = styled.div`
   position: relative;
   width: 100%;
@@ -12,9 +13,9 @@ const ContentArea = styled.div`
   justify-content: center;
 `;
 
-const WelcomeArea = styled.div`
+const RegistrationArea = styled.div`
   height: 20%;
-  width: 75%;
+  width: 40%;
   margin-left: auto;
   margin-right: auto;
   border: 1px solid white;
@@ -24,7 +25,7 @@ const WelcomeArea = styled.div`
   justify-content: space-between;
   padding: 20px;
 `;
-const WelcomeTitle = styled.div`
+const RegistrationMessage = styled.div`
   position: relative;
   width: 90%;
   height: 20%;
@@ -35,50 +36,32 @@ const WelcomeTitle = styled.div`
   display: flex;
   justify-content: center;
   text-align: center;
-  font-size: 18px;
+  font-size: 24px;
   font-family: ${'Calibri (Body)'};
   font-weight: ${'Bold'};
 `;
-
-const WelcomeMessage = styled.div`
-  position: relative;
-  width: 90%;
-  height: 20%;
-  margin-left: auto;
-  margin-right: auto;
-  background-color: #9e9e9e;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  font-size: 14px;
-  font-family: ${'Calibri (Body)'};
-  font-weight: ${'Bold'};
-`;
-
 const ButtonPositon = styled.div`
-  width: 40%;
+  width: 100%;
   height: 20%;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 10px;
+  margin-bottom: 10%;
 `;
-export default function InitialScene(props) {
-  const { userName, buttonOnClick } = props;
 
+export default function RegistrationSuccess(props) {
+  const { buttonOnClick } = props;
   return (
     <ContentArea>
-      <WelcomeArea>
-      <WelcomeTitle>{`Hello ${userName}.`}</WelcomeTitle>
-      <WelcomeMessage>Welcome back to the Smart Bank</WelcomeMessage>
+      <RegistrationArea>
+        <RegistrationMessage>Registration Successful</RegistrationMessage>
         <ButtonPositon>
           <Button
             text={'Continue'}
-            buttonKey={'mainmenu'}
+            buttonKey={'login'}
             onClickFunc={buttonOnClick}
           ></Button>
         </ButtonPositon>
-      </WelcomeArea>
+      </RegistrationArea>
     </ContentArea>
   );
 }

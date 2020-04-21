@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from '../generic/button';
+import Button from '../../generic/button';
 
 const ContentArea = styled.div`
   position: relative;
@@ -48,16 +48,16 @@ const ButtonPositon = styled.div`
   margin-bottom: 10%;
 `;
 
-export default function RegistrationSuccess(props) {
+export default function RegistrationFailed(props) {
   const { buttonOnClick } = props;
   return (
     <ContentArea>
       <RegistrationArea>
-        <RegistrationMessage>Registration Successful</RegistrationMessage>
+        <RegistrationMessage>Registration Failed</RegistrationMessage>
         <ButtonPositon>
           <Button
-            text={'Continue'}
-            buttonKey={'login'}
+            text={'Try again'}
+            buttonKey={'register'}
             onClickFunc={buttonOnClick}
           ></Button>
         </ButtonPositon>

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from '../generic/button';
+import Button from '../../generic/button';
+
 const ContentArea = styled.div`
   position: relative;
   width: 100%;
@@ -13,8 +14,8 @@ const ContentArea = styled.div`
 `;
 
 const MenuArea = styled.div`
-  height: 30%;
-  width: 50%;
+  height: 230px;
+  width: 75%;
   margin-left: auto;
   margin-right: auto;
   border: 1px solid white;
@@ -22,7 +23,6 @@ const MenuArea = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  font-family: ${'Calibri (Body)'};
   padding: 20px;
 `;
 const MenuMessage = styled.div`
@@ -40,26 +40,29 @@ const MenuMessage = styled.div`
   font-family: ${'Calibri (Body)'};
   font-weight: ${'Bold'};
 `;
-const ButtonPositon = styled.div`
-  width: 100%;
-  height: 20%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 10%;
-`;
-export default function VerificationScene(props) {
-  const { buttonOnClick, amount } = props;
+
+export default function AccountMenuScene(props) {
+  const { buttonOnClick, accounts } = props;
   return (
     <ContentArea>
       <MenuArea>
-        <MenuMessage>{`Your withdrawal request for £${amount} is processing...`}</MenuMessage>
-        <ButtonPositon>
-          <Button
-            text={'Return to Main Menu'}
-            buttonKey={'initial'}
-            onClickFunc={buttonOnClick}
-          ></Button>
-        </ButtonPositon>
+        <MenuMessage>Your Bank Accounts</MenuMessage>
+        {accounts && accounts.map(a => <Button
+          text={a.bank.bankName}
+          buttonKey={'manageaccount'}
+          onClickProps={a}
+          onClickFunc={buttonOnClick}
+        />)}
+        <Button
+          text={'Register New Account'}
+          buttonKey={'registeraccount'}
+          onClickFunc={buttonOnClick}
+        />
+        <Button
+          text={'Back to Menu'}
+          buttonKey={'mainmenu'}
+          onClickFunc={buttonOnClick}
+        />
       </MenuArea>
     </ContentArea>
   );

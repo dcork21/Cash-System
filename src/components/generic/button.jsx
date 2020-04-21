@@ -7,7 +7,7 @@ const ContentArea = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: auto;
+  height: 30px;
   width: 100%;
   box-sizing: border-box;
   :hover {
@@ -15,16 +15,16 @@ const ContentArea = styled.div`
   }
 `;
 const ButtonText = styled.div`
-  font-size: 16px;
+  font-size: 14px;
   width: 100%;
   text-align: center;
 `;
 
 function Button(props) {
-  const { text, buttonKey, onClickFunc } = props;
+  const { text, buttonKey, onClickFunc, onClickProps } = props;
   return (
     <ContentArea>
-      <ButtonText onClick={() => onClickFunc(buttonKey)}>
+      <ButtonText onClick={() => onClickFunc(buttonKey, onClickProps)}>
         <p>{text}</p>
       </ButtonText>
     </ContentArea>

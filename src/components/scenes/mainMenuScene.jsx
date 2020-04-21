@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Button from '../generic/button';
+
 const ContentArea = styled.div`
   position: relative;
   width: 100%;
@@ -13,8 +14,8 @@ const ContentArea = styled.div`
 `;
 
 const MenuArea = styled.div`
-  height: 20%;
-  width: 40%;
+  height: 230px;
+  width: 75%;
   margin-left: auto;
   margin-right: auto;
   border: 1px solid white;
@@ -39,26 +40,28 @@ const MenuMessage = styled.div`
   font-family: ${'Calibri (Body)'};
   font-weight: ${'Bold'};
 `;
-const ButtonPositon = styled.div`
-  width: 100%;
-  height: 20%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 10%;
-`;
+
 export default function MainMenuScene(props) {
   const { buttonOnClick } = props;
   return (
     <ContentArea>
       <MenuArea>
         <MenuMessage>Main Menu</MenuMessage>
-        <ButtonPositon>
-          <Button
-            text={'Withdraw Cash'}
-            buttonKey={'withdraw'}
-            onClickFunc={buttonOnClick}
-          ></Button>
-        </ButtonPositon>
+        <Button
+          text={'My User Account'}
+          buttonKey={'accounts'}
+          onClickFunc={buttonOnClick}
+        />
+        <Button
+          text={'My Bank Accounts'}
+          buttonKey={'accountmenu'}
+          onClickFunc={buttonOnClick}
+        />
+        <Button
+          text={'Logout'}
+          buttonKey={'logout'}
+          onClickFunc={buttonOnClick}
+        />
       </MenuArea>
     </ContentArea>
   );

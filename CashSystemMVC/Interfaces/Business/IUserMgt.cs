@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using CashSystemMVC.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CashSystemMVC.Interfaces.Business
 {
@@ -123,7 +124,7 @@ namespace CashSystemMVC.Interfaces.Business
 
                 if (identity == null) return null;
 
-                User user = _data.Users.FirstOrDefault(u => u.IdentityId == identity.Id);
+                User user = _data.Users.Include(u => u.Accounts).ThenInclude(a => a.Bank).FirstOrDefault(u => u.IdentityId == identity.Id);
 
                 if (user == null) return null;
 

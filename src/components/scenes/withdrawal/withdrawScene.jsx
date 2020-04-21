@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from '../generic/button';
+import Button from '../../generic/button';
+import { useState } from 'react';
 const ContentArea = styled.div`
   position: relative;
   width: 100%;
@@ -42,8 +43,20 @@ const WithdrawMessage = styled.div`
 const Amount = styled.div`
   margin-left: auto;
   margin-right: auto;
+  font-size: 30px;
+  font-weight: 600;
 `;
-const ButtonPositon = styled.div`
+const AmountButtonPositon = styled.div`
+  width: 30%;
+  height: 20%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10%;
+  display: flex;
+  justify-content: space-evenly;
+`;
+
+const MenuButtonPositon = styled.div`
   width: 100%;
   height: 20%;
   margin-left: auto;
@@ -53,29 +66,43 @@ const ButtonPositon = styled.div`
   justify-content: space-evenly;
 `;
 export default function MainMenuScene(props) {
-  const { amountClick, confirmClick, amount } = props;
+  const { buttonOnClick } = props;
+  const [amount, setAmount] = useState(10);
+
+  function setWithdrawAmount(newAmount) {
+    if ((amount > 5 && newAmount < 0) || (amount < 250 && newAmount > 0))
+      return setAmount(amount + newAmount);
+  }
+
   return (
     <ContentArea>
       <WithdrawArea>
         <WithdrawMessage>Cash Withdrawal</WithdrawMessage>
         <Amount>{`£${amount}`}</Amount>
-        <ButtonPositon>
+        <AmountButtonPositon>
           <Button
             text={'- £5'}
             buttonKey={'withdraw'}
-            onClickFunc={() => amountClick(-5)}
+            onClickFunc={() => setWithdrawAmount(-5)}
           ></Button>
           <Button
             text={'+ £5'}
             buttonKey={'withdraw'}
-            onClickFunc={() => amountClick(5)}
+            onClickFunc={() => setWithdrawAmount(5)}
           ></Button>
+        </AmountButtonPositon>
+        <MenuButtonPositon>
           <Button
             text={'Confirm'}
             buttonKey={'verification'}
-            onClickFunc={confirmClick}
+            onClickFunc={() => {}}
           ></Button>
-        </ButtonPositon>
+          <Button
+            text={'Back to Menu'}
+            buttonKey={'mainmenu'}
+            onClickFunc={buttonOnClick}
+          ></Button>
+        </MenuButtonPositon>
       </WithdrawArea>
     </ContentArea>
   );

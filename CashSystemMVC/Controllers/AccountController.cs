@@ -29,7 +29,7 @@ namespace CashSystemMVC.Controllers
 
                 if (account == null) return new BadRequestResult();
 
-                return new OkResult();
+                return new OkObjectResult(account);
 
             }
             catch (Exception e)

@@ -8,11 +8,13 @@ const ContentArea = styled.div`
   background-color: #edece8;
   box-sizing: border-box;
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  text-align: center;
 `;
 
 const HeaderTitle = styled.div`
-  font-size: 45px;
+  font-size: 35px;
   font-family: ${'Calibri (Body)'};
 `;
 

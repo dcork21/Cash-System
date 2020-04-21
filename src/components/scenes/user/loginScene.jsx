@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Button from '../generic/button';
-import FormInput from '../generic/formInput';
-import { authenticateUser } from '../../requests/userRequests';
+import Button from '../../generic/button';
+import FormInput from '../../generic/formInput';
+import { authenticateUser } from '../../../requests/userRequests';
 
 const ContentArea = styled.div`
   position: relative;
@@ -16,8 +16,8 @@ const ContentArea = styled.div`
 `;
 
 const LoginArea = styled.div`
-  height: 290px;
-  width: 60%;
+  height: auto;
+  width: 75%;
   margin-left: auto;
   margin-right: auto;
   border: 1px solid white;
@@ -30,7 +30,7 @@ const LoginArea = styled.div`
 const LoginMessage = styled.div`
   position: relative;
   width: 100%;
-  height: 50px;
+  height: 20px;
   margin-left: auto;
   margin-right: auto;
   background-color: #9e9e9e;
@@ -61,13 +61,13 @@ const WarningMessage = styled.div`
 const LoginPosition = styled.div`
   position: relative;
   width: 100%;
-  height: 200px;
-  margin-left: -10px;
+  height: auto;
   margin-right: auto;
+  padding-bottom: 50px;
 `;
 const RegisterPosition = styled.div`
   position: absolute;
-  width: 50%;
+  width: 60%;
   height: 20px;
   left: 10px;
   bottom: 10px;
@@ -76,8 +76,8 @@ const RegisterMessage = styled.div`
   position: relative;
   width: 100%;
   height: 200px;
-  margin-left: -10px;
   margin-right: auto;
+  font-size: 12px;
   :hover {
     cursor: pointer;
   }
@@ -85,10 +85,11 @@ const RegisterMessage = styled.div`
 
 const ButtonPositon = styled.div`
   position: absolute;
-  width: 20%;
-  bottom: 10px;
-  right: 10px;
+  width: 30%;
+  bottom: 5px;
+  right: 5px;
 `;
+
 export default function LoginScene(props) {
   const { loginSuccessFunction, registerFunction } = props;
   const [hasFailed, setHasFailed] = useState(false);
@@ -105,12 +106,11 @@ export default function LoginScene(props) {
     if (newWarnings.length > 0) return;
 
     let response = await authenticateUser(userName, password);
-
-    if (response.sessionToken)
-      return loginSuccessFunction(userName, response.sessionToken);
+    if (response)
+      return loginSuccessFunction(response);
     return setHasFailed(true);
   }
-  
+
   return (
     <ContentArea>
       <LoginArea>
@@ -127,13 +127,14 @@ export default function LoginScene(props) {
           />
           <FormInput
             showWarning={warnings.includes('Password')}
+            inputType={'password'}
             inputKey={'Password'}
             inputValue={password}
             updateFunction={setPassword}
           />
           <RegisterPosition>
             <RegisterMessage onClick={() => registerFunction()}>
-              No account? Click here to register
+              No account? Register here.
             </RegisterMessage>
           </RegisterPosition>
           <ButtonPositon>

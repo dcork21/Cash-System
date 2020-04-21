@@ -1,6 +1,5 @@
 ﻿using System;
 using CashSystemMVC.Interfaces.Business;
-using CashSystemMVC.Models;
 using CashSystemMVC.Models.Requests;
 using CashSystemMVC.Models.Responses;
 using Microsoft.AspNetCore.Cors;
@@ -33,19 +32,18 @@ namespace CashSystemMVC.Controllers
         {
             try
             {
-                User user = _userMgt.CreateUser(userName, password, firstName, lastName, address, postcode, mobile, email);
+                var user = _userMgt.CreateUser(userName, password, firstName, lastName, address, postcode, mobile,
+                    email);
 
                 if (user == null) return new BadRequestResult();
 
                 return new OkResult();
-
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 return StatusCode(500);
             }
-
         }
 
         [HttpPost]
@@ -53,19 +51,29 @@ namespace CashSystemMVC.Controllers
         {
             try
             {
-                User user = _userMgt.GetUser(loginRequest.UserName, loginRequest.Password);
+                var user = _userMgt.GetUser(loginRequest.UserName, loginRequest.Password);
 
-                if(user == null) return new UnauthorizedResult();
+                if (user == null) return new UnauthorizedResult();
 
-                return new OkObjectResult(new LoginResponse(){UserId = user.UserId, SessionToken = user.SessionToken});
-
+                return new OkObjectResult(new LoginResponse
+                {
+                    UserId = user.UserId, 
+                    SessionToken = user.SessionToken, 
+                    UserName = user.UserIdentity.UserName,
+                    FirstName = user.UserIdentity.FirstName,
+                    LastName = user.UserIdentity.LastName,
+                    PostAddress = user.UserIdentity.PostAddress,
+                    Postcode = user.UserIdentity.Postcode,
+                    Mobile = user.UserIdentity.Mobile,
+                    Email = user.UserIdentity.Email,
+                    Accounts = user.Accounts
+                });
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 return StatusCode(500);
             }
-
         }
     }
 }

@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from '../generic/button';
-
+import Button from '../../generic/button';
 const ContentArea = styled.div`
   position: relative;
   width: 100%;
@@ -13,9 +12,9 @@ const ContentArea = styled.div`
   justify-content: center;
 `;
 
-const RegistrationArea = styled.div`
-  height: 20%;
-  width: 40%;
+const MenuArea = styled.div`
+  height: 30%;
+  width: 50%;
   margin-left: auto;
   margin-right: auto;
   border: 1px solid white;
@@ -23,12 +22,13 @@ const RegistrationArea = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  font-family: ${'Calibri (Body)'};
   padding: 20px;
 `;
-const RegistrationMessage = styled.div`
+const MenuMessage = styled.div`
   position: relative;
   width: 90%;
-  height: 20%;
+  height: 30%;
   margin-left: auto;
   margin-right: auto;
   background-color: #9e9e9e;
@@ -47,21 +47,20 @@ const ButtonPositon = styled.div`
   margin-right: auto;
   margin-bottom: 10%;
 `;
-
-export default function RegistrationFailed(props) {
-  const { buttonOnClick } = props;
+export default function VerificationScene(props) {
+  const { buttonOnClick, amount } = props;
   return (
     <ContentArea>
-      <RegistrationArea>
-        <RegistrationMessage>Registration Failed</RegistrationMessage>
+      <MenuArea>
+        <MenuMessage>{`Your withdrawal request for £${amount} is processing...`}</MenuMessage>
         <ButtonPositon>
           <Button
-            text={'Try again'}
-            buttonKey={'register'}
+            text={'Return to Main Menu'}
+            buttonKey={'initial'}
             onClickFunc={buttonOnClick}
           ></Button>
         </ButtonPositon>
-      </RegistrationArea>
+      </MenuArea>
     </ContentArea>
   );
 }

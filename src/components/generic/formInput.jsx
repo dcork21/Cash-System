@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 const InputBox = styled.div`
-  width: 80%;
-  height: 40px;
+  width: 90%;
+  height: 30px;
   margin-top: 10px;
   margin-left: auto;
   margin-right: auto;
@@ -13,7 +13,7 @@ const InputBox = styled.div`
   box-sizing: border-box;
 `;
 const InputKey = styled.div`
-  width: 30%;
+  width: 40%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -21,12 +21,12 @@ const InputKey = styled.div`
   text-align: right;
   border-bottom: 1px solid white;
   padding-right: 5px;
-  font-size: 18px;
+  font-size: 16px;
   box-sizing: border-box;
 `;
 const InputValue = styled.input`
-  width: 30%;
-  font-size: 18px;
+  width: 50%;
+  font-size: 14px;
   border: 1px solid white;
   box-sizing: border-box;
 `;
@@ -49,6 +49,7 @@ export default function FormInput(props) {
     inputValue,
     inputType,
     updateFunction,
+    maxLength
   } = props;
 
   return (
@@ -57,6 +58,7 @@ export default function FormInput(props) {
       <InputWarning>{showWarning ? '*' : ' '}</InputWarning>
       <InputValue
         type={inputType}
+        maxLength={maxLength || 32}
         onChange={(e) => updateFunction(e.target.value)}
         value={inputValue}
       />

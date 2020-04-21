@@ -16,6 +16,7 @@ namespace CashSystemMVC.Models
         #endregion
 
         #region RelationalData
+        [ForeignKey("BankId")] public Bank Bank { get; set; }
         [ForeignKey("AccountId")] public List<Withdrawal> Withdrawals { get; set; }
         #endregion
     }
