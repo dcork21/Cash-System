@@ -68,6 +68,7 @@ const ButtonPositon = styled.div`
 `;
 export default function AccountScene(props) {
   const { buttonOnClick, bank, sortCode, accountNumber, balance } = props;
+  console.log('props', props);
   return (
     <ContentArea>
       <WelcomeArea>

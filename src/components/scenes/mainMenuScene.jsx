@@ -42,7 +42,7 @@ const MenuMessage = styled.div`
 `;
 
 export default function MainMenuScene(props) {
-  const { buttonOnClick } = props;
+  const { buttonOnClick, showWithdrawalMenu } = props;
   return (
     <ContentArea>
       <MenuArea>
@@ -57,6 +57,11 @@ export default function MainMenuScene(props) {
           buttonKey={'accountmenu'}
           onClickFunc={buttonOnClick}
         />
+        {showWithdrawalMenu && <Button
+          text={'My Withdrawals'}
+          buttonKey={'withdrawmenu'}
+          onClickFunc={buttonOnClick}
+        />}
         <Button
           text={'Logout'}
           buttonKey={'logout'}

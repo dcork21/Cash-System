@@ -10,8 +10,11 @@ const ContentArea = styled.div`
   height: 30px;
   width: 100%;
   box-sizing: border-box;
+  margin: 5px;
+  min-width: 40px;
   :hover {
     cursor: pointer;
+    color: white;
   }
 `;
 const ButtonText = styled.div`

@@ -12,6 +12,6 @@ export async function registerAccount(
     method: 'PUT',
     mode: 'cors',
     cache: 'no-cache',
-  }).then((res) => res.status === 200);
+  }).then((res) => res.json());
   return response;
 }

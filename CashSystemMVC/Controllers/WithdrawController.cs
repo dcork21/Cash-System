@@ -30,7 +30,7 @@ namespace CashSystemMVC.Controllers
 
                 if (string.IsNullOrEmpty(withdrawalToken)) return new UnauthorizedResult();
 
-                return new OkObjectResult(new WithdrawalResponse() { AccountId = withdrawal.AccountId, WithdrawalToken = withdrawalToken });
+                return new OkObjectResult(new WithdrawalResponse() { AccountId = withdrawal.AccountId, WithdrawalToken = withdrawalToken, Expiry = DateTime.Now.AddMinutes(20)});
             }
             catch (Exception e)
             {

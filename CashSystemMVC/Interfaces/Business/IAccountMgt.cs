@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using CashSystemMVC.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CashSystemMVC.Interfaces.Business
 {
@@ -74,7 +75,7 @@ namespace CashSystemMVC.Interfaces.Business
                 _data.SaveChanges();
 
                 // return created account (will be null if account was not created for some reason)
-                return _data.Accounts.FirstOrDefault(a => a.AccountNumber == accountNumber && a.SortCode == sortCode);
+                return _data.Accounts.Include(a => a.Bank).FirstOrDefault(a => a.AccountNumber == accountNumber && a.SortCode == sortCode);
             }
             catch (Exception e)
             {

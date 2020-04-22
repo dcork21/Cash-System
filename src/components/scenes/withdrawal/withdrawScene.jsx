@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Button from '../../generic/button';
 import { useState } from 'react';
+import { createWithdrawal } from '../../../requests/withdrawalRequests';
 const ContentArea = styled.div`
   position: relative;
   width: 100%;
@@ -40,6 +41,21 @@ const WithdrawMessage = styled.div`
   font-family: ${'Calibri (Body)'};
   font-weight: ${'Bold'};
 `;
+const WithdrawWarning = styled.div`
+  position: relative;
+  width: 100%;
+  height: 20%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #9e9e9e;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-size: 18px;
+  font-family: ${'Calibri (Body)'};
+  color: red;
+`;
 const Amount = styled.div`
   margin-left: auto;
   margin-right: auto;
@@ -54,6 +70,7 @@ const AmountButtonPositon = styled.div`
   margin-bottom: 10%;
   display: flex;
   justify-content: space-evenly;
+  box-sizing: border-box;
 `;
 
 const MenuButtonPositon = styled.div`
@@ -65,19 +82,40 @@ const MenuButtonPositon = styled.div`
   display: flex;
   justify-content: space-evenly;
 `;
-export default function MainMenuScene(props) {
-  const { buttonOnClick } = props;
+export default function WithdrawScene(props) {
+  const {
+    updateWithdrawals,
+    accountId,
+    sessionToken,
+    accountNumber,
+    buttonOnClick,
+  } = props;
+  const [hasFailed, setHasFailed] = useState(false);
   const [amount, setAmount] = useState(10);
-
   function setWithdrawAmount(newAmount) {
     if ((amount > 5 && newAmount < 0) || (amount < 250 && newAmount > 0))
       return setAmount(amount + newAmount);
   }
 
+  async function confirmWithdrawal() {
+
+    const response = await createWithdrawal(
+      accountId,
+      sessionToken,
+      accountNumber,
+      amount
+    );
+
+    if (!response) return setHasFailed(true);
+    return updateWithdrawals({ ...response, accountId, amount });
+  }
   return (
     <ContentArea>
       <WithdrawArea>
         <WithdrawMessage>Cash Withdrawal</WithdrawMessage>
+        {hasFailed && (
+          <WithdrawWarning>Withdrawal request unsuccessful</WithdrawWarning>
+        )}
         <Amount>{`£${amount}`}</Amount>
         <AmountButtonPositon>
           <Button
@@ -93,14 +131,13 @@ export default function MainMenuScene(props) {
         </AmountButtonPositon>
         <MenuButtonPositon>
           <Button
-            text={'Confirm'}
-            buttonKey={'verification'}
-            onClickFunc={() => {}}
-          ></Button>
-          <Button
             text={'Back to Menu'}
             buttonKey={'mainmenu'}
             onClickFunc={buttonOnClick}
+          ></Button>
+          <Button
+            text={'Confirm'}
+            onClickFunc={() => confirmWithdrawal()}
           ></Button>
         </MenuButtonPositon>
       </WithdrawArea>

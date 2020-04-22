@@ -19,37 +19,44 @@ const ContentArea = styled.div`
 
 function App() {
   const [userSession, setUserSession] = useState({ Identity: {} });
-
+  const [withdrawals, setWithdrawals] = useState([]);
   const [showScene, setShowScene] = useState('login');
-  const [sceneProps, setSceneProps] = useState('login');
+  const [sceneProps, setSceneProps] = useState({});
 
   function buttonOnClick(keyText, keyProps) {
     setSceneProps(keyProps);
     return setShowScene(keyText);
   }
-
   function loginSuccessFunction(session) {
-    console.log('session', session);
     setUserSession(session);
     return setShowScene('initial');
   }
 
+  function updateWithdrawals(newWithdrawal) {
+    setWithdrawals([...withdrawals, newWithdrawal]);
+    setSceneProps(newWithdrawal);
+    return setShowScene('withdrawverify');
+  }
   function registerAccountSuccessFunction(response) {
     let accounts = userSession.accounts || [];
     accounts.push(response);
     setUserSession({ ...userSession, accounts });
+    setSceneProps(response);
+    return setShowScene('manageaccount');
   }
   return (
     <MainBody>
       <Header></Header>
       <ContentArea>
         <SceneFactory
-          {...{ userSession, showScene, sceneProps }}
+          {...{ userSession, showScene, sceneProps, withdrawals }}
           functions={{
             buttonOnClick,
             showScene,
             loginSuccessFunction,
             registerAccountSuccessFunction,
+            setShowScene,
+            updateWithdrawals,
           }}
         />
       </ContentArea>
