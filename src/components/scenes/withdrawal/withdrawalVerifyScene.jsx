@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, Fragment } from 'react';
 import styled from 'styled-components';
 import Button from '../../generic/button';
 import DateCountdown from 'react-date-countdown-timer';
+import { confirmWithdrawal } from '../../../requests/withdrawalRequests';
 
 const ContentArea = styled.div`
   position: relative;
@@ -80,7 +81,14 @@ const ButtonPositon = styled.div`
   margin-bottom: 10%;
 `;
 export default function VerificationScene(props) {
-  const { buttonOnClick, withdrawalToken, expiry, amount } = props;
+  const {
+    confirmedWithdrawal,
+    buttonOnClick,
+    accountId,
+    withdrawalToken,
+    expiry,
+    amount,
+  } = props;
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const calculateTimeLeft = useCallback(() => {
@@ -99,12 +107,14 @@ export default function VerificationScene(props) {
     return timeLeft;
   });
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-  useEffect(() => {    
+  const [hasWithdrawn, setHasWithdrawn] = useState(false);
+
+  useEffect(() => {
     setTimeout(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
     return () => {};
-  }, [expiry,calculateTimeLeft]);
+  }, [expiry, calculateTimeLeft]);
 
   const timerComponents = [];
 
@@ -120,17 +130,35 @@ export default function VerificationScene(props) {
     );
   });
 
+  async function mockNfcTransaction() {
+    const response = await confirmWithdrawal(accountId, withdrawalToken);
+    console.log('response', response);
+    if (response) return setHasWithdrawn(true);
+    return confirmedWithdrawal(withdrawalToken);
+  }
   return (
     <ContentArea>
       <MenuArea>
-        <MenuMessage>{withdrawalToken}</MenuMessage>
-        <AmountMessage>{`£${amount}`}</AmountMessage>
-        <CountdownMessage>
-          <DateCountdown
-            dateTo={expiry}
-            callback={() => alert('Withdrawal Request Expired')}
-          />
-        </CountdownMessage>
+        {!hasWithdrawn ? (
+          <Fragment>
+            <MenuMessage>{withdrawalToken}</MenuMessage>
+            <AmountMessage>{`£${amount}`}</AmountMessage>
+            <CountdownMessage>
+              <DateCountdown
+                dateTo={expiry}
+                callback={() => alert('Withdrawal Request Expired')}
+              />
+            </CountdownMessage>
+            <ButtonPositon>
+              <Button
+                text={'Mock NFC Transaction'}
+                onClickFunc={mockNfcTransaction}
+              />
+            </ButtonPositon>
+          </Fragment>
+        ) : (
+          <MenuMessage>Transaction Complete</MenuMessage>
+        )}
         <ButtonPositon>
           <Button
             text={'Return to Main Menu'}

@@ -44,7 +44,7 @@ void* udpFunction(void* args)
 	while (1)
 	{
 		received_bytes = recvfrom(s, buf, BUFLEN, 0, (struct sockaddr*)&si_other,(socklen_t*)&slen);
-		if (received_bytes > 0) printf("Here is the udp message: %s\n", buf);
+		if (received_bytes > 0) printf("%s\n", buf);
 
 		//printf("I am udpFunction.\n");
 		usleep(500);
@@ -111,7 +111,7 @@ int main()
 
 	while (1)
 	{
-		printf("I am main function.\n");
+		//printf("I am main function.\n");
 		usleep(500);
 	}
 

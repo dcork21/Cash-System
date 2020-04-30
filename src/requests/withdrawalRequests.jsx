@@ -24,3 +24,22 @@ export async function createWithdrawal(
   }).then((res) => res.json());
   return response;
 }
+
+export async function confirmWithdrawal(accountId, withdrawalToken) {
+  const baseUrl = 'https://localhost:44356/Withdraw/Confirm';
+  console.log('accountId', accountId);
+  console.log('withdrawalToken', withdrawalToken);
+  const response = await fetch(baseUrl, {
+    method: 'POST',
+    mode: 'cors',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      AccountId: accountId,
+      WithdrawalToken: withdrawalToken,
+    }),
+  }).then((res) => res.status === 200);
+  return response;
+}

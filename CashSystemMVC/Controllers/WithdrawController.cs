@@ -62,7 +62,8 @@ namespace CashSystemMVC.Controllers
         {
             try
             {
-                if (!_requestWithdraw.ConfirmWithdraw(withdrawalResponse.AccountId, withdrawalResponse.WithdrawalToken)) return new BadRequestResult();
+                if (!_requestWithdraw.ConfirmWithdraw(withdrawalResponse.AccountId, withdrawalResponse.WithdrawalToken)) 
+                    return new BadRequestResult();
                 return new OkResult();
             }
             catch (Exception e)

@@ -17,7 +17,7 @@ namespace CashSystemMVC.Interfaces.System
             var udpClient = new UdpClient(11000);
             try
             {
-                udpClient.Connect("192.168.0.19", port);
+                udpClient.Connect("10.0.0.35", port);
 
                 // Sends a message to the host to which you have connected.
                 var sendBytes = Encoding.ASCII.GetBytes(message);
