@@ -33,6 +33,7 @@ namespace CashSystemMVC
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Add System interfaces
+            services.AddScoped<IUdpClient, UpdClient>();
             services.AddScoped<ICrypto, Crypto>();
             services.AddScoped<IRequestWithdraw, RequestWithdraw>();
 

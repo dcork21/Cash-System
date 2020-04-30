@@ -334,3 +334,4 @@ sh.exe.stackdump
 # Webpack analyser 
 statistics.html
 public/Assets-Mvc/.DS_Store
+/RaspberryPi.vdi
